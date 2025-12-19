@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/grocery.dart';
@@ -22,6 +23,7 @@ class _NewItemState extends State<NewItem> {
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
   GroceryCategory _selectedCategory = defaultCategory;
+  
 
   @override
   void initState() {
@@ -48,7 +50,16 @@ class _NewItemState extends State<NewItem> {
 
   void onAdd() {
     // Will be implemented later - Create and return the new grocery
+    final name =   _nameController.text;
+    final quantity = int.tryParse( _quantityController.text) ?? 1;
+    final category = _selectedCategory ;
+   
+
+    final newGrocery = Grocery(id: DateTime.now().toString() , name: name, quantity: quantity, category: category);
+    Navigator.pop(context, newGrocery);
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +88,10 @@ class _NewItemState extends State<NewItem> {
                 Expanded(
                   child: DropdownButtonFormField<GroceryCategory>(
                     initialValue: _selectedCategory,
-                    items: [  ],
+                    items: GroceryCategory.values.map((value) => DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name.toUpperCase()),
+                      )).toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
